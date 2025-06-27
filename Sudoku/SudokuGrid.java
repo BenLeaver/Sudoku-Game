@@ -157,6 +157,17 @@ public class SudokuGrid implements ISudokuGrid {
         grid = new int[GRID_SIZE][GRID_SIZE];
     }
 
+    public SudokuGrid cloneGrid() {
+        int[][] newGrid = new int[GRID_SIZE][GRID_SIZE];
+        for (int i = 0; i < GRID_SIZE; i++) {
+            System.arraycopy(this.grid[i], 0, newGrid[i], 0, GRID_SIZE);
+        }
+
+        SudokuGrid cloned = new SudokuGrid();
+        cloned.initialiseGrid(newGrid);
+        return cloned;
+    }
+
     @Override
     public void displayGrid() {
         for (int[] row : grid)
@@ -176,5 +187,4 @@ public class SudokuGrid implements ISudokuGrid {
             System.out.println();
         }
     }
-
 }
