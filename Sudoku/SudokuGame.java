@@ -5,6 +5,7 @@ public class SudokuGame {
     private final ISudokuGrid grid;
     private final SudokuSolver solver;
     private final Scanner scanner;
+    private int[][] originalGrid;
 
     public SudokuGame(ISudokuGrid grid)
     {
@@ -16,7 +17,7 @@ public class SudokuGame {
     public void start()
     {
         System.out.println(
-            "Welcome to the Sudoku Tester!" +
+            "Welcome to the Sudoku Tester!\n" +
             "======================\n" +
             "Choose an option:\n" +
             "1. Generate Sudoku Puzzle\n" +
@@ -31,18 +32,31 @@ public class SudokuGame {
             System.out.print("Enter your choice: ");
             choice = Integer.parseInt(scanner.nextLine());
             switch (choice) {
-                case 1 -> {
-                    System.out.print("Enter difficulty level (number of cells to remove): ");
-                    int toRemove = Integer.parseInt(scanner.nextLine());
-                    SudokuGenerator gen = new SudokuGenerator(grid);
-                    gen.generatePuzzle(toRemove);
-                    grid.displayGrid();
-                    System.out.println("Grid Generated!");
-                }
+                case 1 -> generate();
                 case 2 -> solvePuzzle();
                 case 3 -> getInput();
+                case 4 -> System.out.println("Goodbye!");
                 default -> {
                 }
+            }
+        }
+    }
+
+    private void generate()
+    {
+        System.out.print("Enter difficulty level (number of cells to remove): ");
+        int toRemove = Integer.parseInt(scanner.nextLine());
+        SudokuGenerator gen = new SudokuGenerator(grid);
+        gen.generatePuzzle(toRemove);
+        grid.displayGrid();
+        System.out.println("Grid Generated!");
+
+        
+        // Create a deep copy of the grid
+        originalGrid = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                originalGrid[i][j] = grid.getValue(i, j);
             }
         }
     }
@@ -72,8 +86,9 @@ public class SudokuGame {
                     solvePuzzle();
                     getInput();
                 }
-                case 5 -> System.out.println("Goodbye!");
-                default -> throw new AssertionError();
+                case 5 -> start();
+                default -> {
+                }
             }
         }
     }
@@ -86,7 +101,7 @@ public class SudokuGame {
             "2. Enter a Number\n" +
             "3. Reset Puzzle\n" + 
             "4. Solve Puzzle\n" +
-            "5. Exit\n" +
+            "5. Back\n" +
             "======================\n"
             );
     }
@@ -106,13 +121,23 @@ public class SudokuGame {
             System.out.print("Enter number (1-9): ");
             int num = Integer.parseInt(scanner.nextLine());
             
-            if (grid.setValue(row, col, num))
+            int original = grid.getValue(row, col);
+            if (original == 0)
             {
-                System.out.println("Move placed successfully!");
+                grid.setValue(row, col, num);
+                if (grid.isValid())
+                {
+                    System.out.println("Move placed successfully!");
+                }
+                else
+                {
+                    System.out.println("Invalid move.");
+                    grid.setValue(row, col, original);
+                }
             }
             else
             {
-                System.out.println("Invalid move.");
+                System.out.println("Cell is already filled");
             }
         }
         catch (NumberFormatException | IndexOutOfBoundsException e)
@@ -123,7 +148,12 @@ public class SudokuGame {
 
     private void resetGrid()
     {
-        grid.resetGrid();
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                int originalValue = originalGrid[i][j];
+                grid.setValue(i, j, originalValue);
+            }
+        }
         System.out.println("Grid has been reset.");
     }
 
