@@ -170,8 +170,13 @@ public class SudokuGrid implements ISudokuGrid {
 
     @Override
     public void displayGrid() {
+        System.out.println("    0 1 2 3 4 5 6 7 8");
+        System.out.println("    _ _ _ _ _ _ _ _ _");
+        int rowNum = 0;
         for (int[] row : grid)
         {
+            rowNum += 1;
+            System.out.print(rowNum + " | ");
             for (int cell : row)
             {
                 if (cell == 0)
