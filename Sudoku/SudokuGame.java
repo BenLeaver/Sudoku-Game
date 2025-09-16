@@ -17,7 +17,7 @@ public class SudokuGame {
     public void start()
     {
         System.out.println(
-            "Welcome to the Sudoku Tester!\n" +
+            "Welcome to the Sudoku Game!\n" +
             "======================\n" +
             "Choose an option:\n" +
             "1. Generate Sudoku Puzzle\n" +

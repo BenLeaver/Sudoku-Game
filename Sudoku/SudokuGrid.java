@@ -175,7 +175,6 @@ public class SudokuGrid implements ISudokuGrid {
         int rowNum = 0;
         for (int[] row : grid)
         {
-            rowNum += 1;
             System.out.print(rowNum + " | ");
             for (int cell : row)
             {
@@ -190,6 +189,7 @@ public class SudokuGrid implements ISudokuGrid {
                 System.out.print(" ");
             }
             System.out.println();
+            rowNum += 1;
         }
     }
 }
